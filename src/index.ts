@@ -152,12 +152,12 @@ const parseEmailFromS3 = async (messageId: string) => {
       Bucket: Constants.EmailStorageBucket,
       Key: messageS3File,
     });
-    if (
-      object.ContentLength &&
-      object.ContentLength >= Constants.MagicMaxBytesSes
-    ) {
-      throw new Error(`Email too large to handle`);
-    }
+    // if (
+    //   object.ContentLength &&
+    //   object.ContentLength >= Constants.MagicMaxBytesSes
+    // ) {
+    //   throw new Error(`Email too large to handle`);
+    // }
     if (!object.Body) {
       console.log(`Missing body from email ${messageId}`);
       return;
