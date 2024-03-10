@@ -138,7 +138,7 @@ const createDiscoursePublicReportPost = async (
     });
     throw new Error(`Unsuccessful report post test`);
   }
-  return;
+  return (await result.json()) as { topic_id: number };
 };
 
 const s3 = new S3({
@@ -226,9 +226,9 @@ const processRecord = async (record: SESEvent["Records"][number]) => {
           name: Constants.NameToSendFrom,
         },
         cc: [Constants.EmailToNotifyOnFailure],
-        subject: `Email not matching forum user - ${parsedMail.subject}`,
+        subject: parsedMail.subject,
+        inReplyTo: parsedMail.messageId,
         text: `Hello, thanks for your report. The report was not auto-entered because your email is not registered. We will reach out soon!`,
-        html: parsedMail.html ? parsedMail.html : undefined,
         attachments: parsedMail.attachments.map((a) => ({
           cid: a.cid,
           content: a.content,
@@ -246,10 +246,36 @@ const processRecord = async (record: SESEvent["Records"][number]) => {
       username,
       parsedMail,
     );
-    await createDiscoursePublicReportPost(parsedMail, username, uploads);
+    const { topic_id: newId } = await createDiscoursePublicReportPost(
+      parsedMail,
+      username,
+      uploads,
+    );
     console.log("Success!");
+    await transporter.sendMail({
+      to: parsedMail.from.value.map((v) => v.address),
+      from: {
+        address: Constants.EmailToSendFrom,
+        name: Constants.NameToSendFrom,
+      },
+      subject: parsedMail.subject,
+      inReplyTo: parsedMail.messageId,
+      text: `Your message was received and you can see it to add comments at ${Constants.DiscourseHostWithProtocol}/t/${newId}`,
+    });
+    console.log("Replied to sender with link");
   } catch (e) {
     console.error(e);
+    await transporter.sendMail({
+      to: parsedMail.from.value.map((v) => v.address),
+      cc: [Constants.EmailToNotifyOnFailure],
+      from: {
+        address: Constants.EmailToSendFrom,
+        name: Constants.NameToSendFrom,
+      },
+      subject: parsedMail.subject,
+      inReplyTo: parsedMail.messageId,
+      text: `Your message was not successfully received, likely due to an issue with the attached file.`,
+    });
     await transporter.sendMail({
       to: [Constants.EmailToNotifyOnFailure],
       from: {
