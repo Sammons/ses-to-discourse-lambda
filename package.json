@@ -2,9 +2,12 @@
   "name": "ses-to-discourse-lambda",
   "version": "1.0.0",
   "description": "accepts an SES event and publishes a discourse post",
-  "main": "index.js",
+  "main": "dist/index.js",
   "scripts": {
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "build": "esbuild --bundle --platform=node src/index.ts > index.js && zip bundle.zip index.js",
+    "publish": "node scripts/publish.js",
+    "clean": "rm index.js bundle.zip && rm -rf dist"
   },
   "repository": {
     "type": "git",
@@ -27,11 +30,14 @@
     "@aws-sdk/client-ses": "^3.529.1",
     "@types/aws-lambda": "^8.10.136",
     "got": "^14.2.1",
-    "mailparser": "^3.6.9"
+    "mailparser": "^3.6.9",
+    "nodemailer": "^6.9.12"
   },
   "devDependencies": {
+    "@aws-sdk/client-lambda": "^3.529.1",
     "@types/mailparser": "^3.4.4",
     "@types/node": "^20.11.25",
+    "@types/nodemailer": "^6.4.14",
     "@typescript-eslint/eslint-plugin": "^7.1.1",
     "@typescript-eslint/parser": "^7.1.1",
     "esbuild": "^0.20.1",

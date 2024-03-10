@@ -1,4 +1,5 @@
 {
+  "ignorePatterns": ["index.js"],
   "extends": [
     "plugin:prettier/recommended",
     "plugin:@typescript-eslint/recommended"
