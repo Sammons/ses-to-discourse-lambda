@@ -26,15 +26,15 @@
   },
   "homepage": "https://github.com/Sammons/ses-to-discourse-lambda#readme",
   "dependencies": {
-    "@aws-sdk/client-s3": "^3.529.1",
-    "@aws-sdk/client-ses": "^3.529.1",
+    "@aws-sdk/client-s3": "^3.1040.0",
+    "@aws-sdk/client-ses": "^3.1040.0",
     "@types/aws-lambda": "^8.10.136",
     "got": "^14.2.1",
     "mailparser": "^3.6.9",
     "nodemailer": "^6.9.12"
   },
   "devDependencies": {
-    "@aws-sdk/client-lambda": "^3.529.1",
+    "@aws-sdk/client-lambda": "^3.1040.0",
     "@types/mailparser": "^3.4.4",
     "@types/node": "^20.11.25",
     "@types/nodemailer": "^6.4.14",
