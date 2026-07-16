@@ -30,8 +30,8 @@
     "@aws-sdk/client-ses": "^3.529.1",
     "@types/aws-lambda": "^8.10.136",
     "got": "^14.2.1",
-    "mailparser": "^3.6.9",
-    "nodemailer": "^6.9.12"
+    "mailparser": "^3.9.14",
+    "nodemailer": "^9.0.3"
   },
   "devDependencies": {
     "@aws-sdk/client-lambda": "^3.529.1",
